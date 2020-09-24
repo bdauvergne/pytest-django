@@ -354,9 +354,12 @@ class SettingsWrapper(object):
 
 
 @pytest.yield_fixture()
-def settings():
+def settings(request):
     """A Django settings object which restores changes after the testrun"""
     skip_if_no_django()
+
+    if 'transactional_db' in request.fixturenames:
+        request.getfixturevalue('transactional_db')
 
     wrapper = SettingsWrapper()
     yield wrapper
